@@ -28,7 +28,7 @@ function getAllTodos() {}
  * @param {number} id - Todo 아이디
  * @return {todoData} - 조회하려는 단일 Todo
  */
-function getTodo(todoId) {}
+function getTodo(id) {}
 
 /**
  * @description ID를 제외한 모든 속성을 수정할 수 있는 함수
