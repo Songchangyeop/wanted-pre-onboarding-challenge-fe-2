@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const Base_Url = 'url/todo';
+const Todos = [];
 
 /**
  * @typedef {Object} todoData
@@ -13,38 +13,29 @@ const Base_Url = 'url/todo';
 
 /**
  * @description 할 일을 추가하는 함수
- * @param {number} id - Todo 아이디
- * @param {string} content - 내용
- * @param {boolean} isCompleted - 완료여부
- * @param {string}  category - 카테고리
- * @param {string[]} [tags] - 태그 리스트
+ * @param {Object} todoData
  */
-export async function createTodo(id, content, isCompleted, category, tags) {
+export function createTodo(todoData, isCompleted) {
 	if (!isCompleted) return;
 
-	try {
-		const response = await axios.post(`${Base_Url}/${id}`, {
-			content,
-			category,
-			tags,
-		});
-		return response;
-	} catch (error) {
-		throw new Error(error);
-	}
+	const { id, content, category, tags } = todoData;
+
+	const newTodo = {
+		id,
+		content,
+		category,
+		tags,
+	};
+
+	Todos = [...Todos, newTodo];
 }
 
 /**
  * @description 모든 할 일을 조회하는 함수
  * @return {todoData[]} - 조회하려는 Todo 리스트
  */
-export async function getAllTodos() {
-	try {
-		const response = await axios(Base_Url);
-		return response;
-	} catch (error) {
-		throw new Error(error);
-	}
+export function getAllTodos() {
+	return Todos;
 }
 
 /**
@@ -52,47 +43,34 @@ export async function getAllTodos() {
  * @param {number} id - Todo 아이디
  * @return {todoData} - 조회하려는 단일 Todo
  */
-export async function getTodo(id) {
-	try {
-		const response = await axios(`${Base_Url}/${id}`);
-		return response;
-	} catch (error) {
-		throw new Error(error);
-	}
+export function getTodo(id) {
+	return Todos.find((todo) => todo.id === id);
 }
 
 /**
  * @description ID를 제외한 모든 속성을 수정할 수 있는 함수
- * @param {number} id - Todo 아이디
- * @param {string} content - 내용
+ * @param {todoData} 
  * @param {boolean} isCompleted - 완료여부
- * @param {string} category - 카테고리
- * @param {string[]} [tags] - 태그 리스트
+ * @return {todoData[]} - Todo 리스트
+ 
  */
-export async function updateTodo(id, content, isCompleted, category, tags) {
+export function updateTodo(todoData, isCompleted) {
 	if (!isCompleted) return;
 
-	try {
-		const response = await axios.put(`${Base_Url}/${id}`, {
-			content,
-			category,
-			tags,
-		});
-		return response;
-	} catch (error) {
-		throw new Error(error);
-	}
+	const { id, content, category, tags } = todoData;
+
+	Todos.map((todo) =>
+		todo.id === id ? { ...todo, content, category, tags } : todo
+	);
+
+	return Todos;
 }
 
 /**
  * 모든 할 일을 제거하는 함수
  */
 export function deleteAllTodos() {
-	try {
-		axios.delete(Base_Url);
-	} catch (error) {
-		throw new Error(error);
-	}
+	Todos = [];
 }
 
 /**
@@ -113,36 +91,22 @@ export function deleteTodo(id, tagIndex, isDeleteAllTags) {
  * @param {number} id - Todo 아이디
  */
 export function deleteTodo(id) {
-	try {
-		axios.delete(`${Base_Url}/${id}`);
-	} catch (error) {
-		throw new Error(error);
-	}
+	return Todos.filter((todo) => todo.id === id);
 }
 
 /**
  * @description 특정 할 일의 태그를 삭제하는 함수
  * @param {number} id - Todo 아이디
  * @param {number} [tagIndex] - 태그의 인덱스
- * @param {boolean} isDeleteAllTags - 특정 할 일의 모든 태그 삭제 여부
  */
-export function deleteTag(id, tagId) {
-	try {
-		axios.delete(`${Base_Url}/${id}/tags?tagId=${tagId}`);
-	} catch (error) {
-		throw new Error(error);
-	}
+export function deleteTag(id, tagIndex) {
+	Todos.find((todo) => todo.id === id).filter((_, index) => index === tagIndex);
 }
 
 /**
  * @description 특정 할 일의 모든 태그를 삭제하는 함수
  * @param {number} id - Todo 아이디
- * @param {number} [tagIndex] - 태그의 인덱스
  */
 export function deleteAllTag(id) {
-	try {
-		axios.delete(`${Base_Url}/${id}/tags`);
-	} catch (error) {
-		throw new Error(error);
-	}
+	Todos.map((todo) => (todo.id === id ? { ...todo, tags: [] } : todo));
 }
