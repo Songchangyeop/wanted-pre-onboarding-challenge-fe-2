@@ -5,12 +5,13 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-    "docs": "jsdoc -c jsdoc.json"
+		"docs": "jsdoc -c jsdoc.json"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"axios": "^0.27.2",
 		"jsdoc": "^3.6.11"
 	}
 }
